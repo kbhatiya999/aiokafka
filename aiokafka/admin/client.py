@@ -233,7 +233,8 @@ class AIOKafkaAdminClient:
                 f"Support for CreateTopics v{version} has not yet been added "
                 "to AIOKafkaAdminClient."
             )
-        response = await self._client.send(self._client.get_random_node(), request)
+        cluster_metadata = await self._client.fetch_all_metadata()
+        response = await self._client.send(cluster_metadata.controller.nodeId, request)
         return response
 
     async def delete_topics(
